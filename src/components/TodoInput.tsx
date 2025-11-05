@@ -1,5 +1,5 @@
 // 这是事项输入框的实现
-import React from 'react'
+import React, { useState } from 'react'
 //输入框的属性，有内容吧，
 export interface TodoInputProps {
     onAdd: (title:string) => void; //新增事件获取标题作为参数，返回一个空函数
@@ -7,10 +7,28 @@ export interface TodoInputProps {
 //TodoInput 是一个 React 函数组件,它的 props 类型是 TodoInputProps,它的参数是一个对象，我们从里面解构出 onAdd
 const TodoInput: React.FC<TodoInputProps> = (props) => {
     const {onAdd} = props;
+    //定义状态管理标题
+    const [title, setTitle] = useState('');
+    //实现点击添加事件
+    const handleAdd = () => {
+        //我一点击按钮的添加之后，trim是移除字符串两边的空格，
+        // 如果标题为空，就不调用新增事件，也不清空标题
+        if(!title.trim()) return;
+        //调用新增事件,并传递标题,传到父组件那里去了
+        onAdd(title);
+        //清空标题
+        setTitle('');
+    }
     return (
         <div>
-            <input type="text" placeholder="请输入事项" />
-            <button>添加</button>
+            {/* 只要输入框一变化，我们就拿到e事件的value值放进title状态里 */}
+            <input 
+                type="text" 
+                placeholder="请输入事项" 
+                // 添加value={title}.这时候的输入框就是一个受控组件，显示值由title状态控制
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}/>
+            <button onClick={handleAdd}>添加</button>
         </div>
     )
 }

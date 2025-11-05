@@ -16,9 +16,21 @@ const TodoItem: React.FC<TodoItemProps> = ({todo, onToggle, onDelete}) => {
     return (
         <div>
             {/* 复选框，根据completed状态判断是否勾选,onChange事件触发切换事件,并传递id给父组件 */}
-            <input type="checkbox" checked={todo.completed} onChange={() => onToggle(todo.id)} />
-            <span style={{textDecoration: todo.completed ? 'line-through' : 'none'}}>{todo.title}</span>
-            <button onClick={() => onDelete(todo.id)}>删除</button>
+            <input 
+                type="checkbox" 
+                checked={todo.completed} 
+                //为什么todo下面会有id这个属性，是因为它是Todo类型，Todo类型有id属性
+                onChange={() => onToggle(todo.id)} />
+            <span 
+                style={{textDecoration: todo.completed ? 'line-through' : 'none'}}
+            >
+                {todo.title}
+            </span>
+            <button 
+                onClick={() => onDelete(todo.id)}
+            >
+                删除
+            </button>
         </div>
     )
 }
