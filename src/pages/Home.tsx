@@ -12,6 +12,8 @@ const Home: React.FC = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
     //定义过滤状态
     const [filter, setFilter] = useState<'all' | 'completed' | 'active'>('all');
+        //在home组件加一个input输入框，状态存一下
+    const [search,setSearch] = useState('');
     
 //页面一加载我们就请求api去拿数据
     useEffect(() => {
@@ -46,21 +48,33 @@ const Home: React.FC = () => {
         setTodos(todos.filter(item => item.id !== id));
     }
     //根据过滤状态展示待办的事项,是用来对todos待办数组进行筛选的
+        //忽略大小写的搜索
+    const normalizedSearch = search.trim().toLowerCase();
     const filteredTodos = todos.filter(item => {
         // 父组件怎么知道是什么状态呢，因为父组件用来FilterBar组件，这个组件告诉父组件的，
         // 你点了哪个，就会把哪个状态传递给父组件的setFilter函数
         if(filter === 'active') return !item.completed;
         if(filter === 'completed') return item.completed;
         return true;
-    })
+            // 再根据搜索框的内容进行筛选
+    }).filter(item => item.title.toLowerCase().includes(normalizedSearch));
     return (
         <div className='min-h-screen bg-gray-100 flex justify-center p-8'>
             <div className='w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8'>
                 <h1 className='text-3xl font-bold text-center mb-6'>Todo App</h1>
                 <TodoInput onAdd={handleAdd} />
                     {/* 这里展示过滤栏 */}
+                        {/* 这里加一个输入框 */}
+                <input 
+                    type="text"
+                    placeholder='搜索待办...'
+                    className='w-full p-2 border rounded mb-4'
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    
+                />
                 <FilterBar filter={filter} onChange={setFilter} />
-                    {/* 这里展示待办事项列表 */}
+                    {/* 这里展示待办事项列表,(根据过滤状态和搜索框的内容进行筛选,我搜什么就能出现什么) */}
                 <TodoList todos={filteredTodos} onToggle={handleToggle} onDelete={handleDelete} />
             </div>
         </div>
