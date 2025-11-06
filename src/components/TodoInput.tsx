@@ -10,7 +10,8 @@ const TodoInput: React.FC<TodoInputProps> = (props) => {
     //定义状态管理标题
     const [title, setTitle] = useState('');
     //实现点击添加事件
-    const handleAdd = () => {
+    const handleAdd = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         //我一点击按钮的添加之后，trim是移除字符串两边的空格，
         // 如果标题为空，就不调用新增事件，也不清空标题
         if(!title.trim()) return;
@@ -19,17 +20,33 @@ const TodoInput: React.FC<TodoInputProps> = (props) => {
         //清空标题
         setTitle('');
     }
+    // return (
+    //     <div>
+    //         {/* 只要输入框一变化，我们就拿到e事件的value值放进title状态里 */}
+    //         <input 
+    //             type="text" 
+    //             placeholder="请输入事项" 
+    //             // 添加value={title}.这时候的输入框就是一个受控组件，显示值由title状态控制
+    //             value={title}
+    //             onChange={(e) => setTitle(e.target.value)}/>
+    //         <button onClick={handleAdd}>添加</button>
+    //     </div>
+    // )
     return (
-        <div>
-            {/* 只要输入框一变化，我们就拿到e事件的value值放进title状态里 */}
-            <input 
-                type="text" 
-                placeholder="请输入事项" 
-                // 添加value={title}.这时候的输入框就是一个受控组件，显示值由title状态控制
+        <form onSubmit={handleAdd} className="flex gap-3 mb-4">
+            <input
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}/>
-            <button onClick={handleAdd}>添加</button>
-        </div>
-    )
+                onChange={(e) => setTitle(e.target.value)}
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
+                placeholder="Add a new todo..."
+            />
+            <button
+                type="submit"
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+            >
+                Add
+            </button>
+        </form>
+    );
 }
 export default TodoInput;

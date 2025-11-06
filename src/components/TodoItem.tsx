@@ -14,20 +14,34 @@ export interface TodoItemProps {
 }
 const TodoItem: React.FC<TodoItemProps> = ({todo, onToggle, onDelete}) => {
     return (
-        <div>
+        <div className='
+            flex items-center justify-between
+            p-3 rounded-lg
+            bg-white shadow-sm
+            border border-gray-200
+            '
+        >
             {/* 复选框，根据completed状态判断是否勾选,onChange事件触发切换事件,并传递id给父组件 */}
-            <input 
-                type="checkbox" 
-                checked={todo.completed} 
-                //为什么todo下面会有id这个属性，是因为它是Todo类型，Todo类型有id属性
-                onChange={() => onToggle(todo.id)} />
-            <span 
-                style={{textDecoration: todo.completed ? 'line-through' : 'none'}}
-            >
-                {todo.title}
-            </span>
+            <div className="flex items-center gap-3">
+
+                <input 
+                    type="checkbox" 
+                    checked={todo.completed} 
+                    //为什么todo下面会有id这个属性，是因为它是Todo类型，Todo类型有id属性
+                    onChange={() => onToggle(todo.id)} />
+                <span 
+                    className={`text-lg ${todo.completed ? "line-through text-gray-400" : "text-gray-700"}`}
+                >
+                    {todo.title}
+                </span>
+            </div>
             <button 
                 onClick={() => onDelete(todo.id)}
+                className='
+                    text-sm text-red-500
+                    hover: text-red-700
+                    transition-colors
+                '
             >
                 删除
             </button>

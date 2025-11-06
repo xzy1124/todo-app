@@ -9,12 +9,28 @@ export interface TodoListProps {
 }
 const TodoList: React.FC<TodoListProps> = ({todos, onToggle, onDelete}) => {
     return (
-        <div>
+        <div className='bg-white rounded-xl shadow p-4 mt-6'>
+            {todos.length === 0 ? (
+                <p className='text-center text-gray-400 py-6'>暂无待办事项</p>
+            ) : (
+                // 每个待办项之间有一个分隔线,相当于hr标签
+                <div className='divide-y'>
+                    {todos.map((todo) => (
+                        <div key={todo.id} className='py-3'>
+                            <TodoItem
+                                todo={todo}
+                                onToggle={onToggle}
+                                onDelete={onDelete}
+                            />
+                        </div>
+                    ))}
+                </div>
+            )}
             {/* 因为能展示多个待办，所以能map待办数组中的每个待办，然后渲染一个TodoItem组件 */}
-            {todos.map(todo => (
+            {/* {todos.map(todo => (
                 // 按照TodoItem的props,传递todo,切换事件,删除事件
                 <TodoItem key={todo.id} todo={todo} onToggle={onToggle} onDelete={onDelete} />
-            ))}
+            ))} */}
         </div>
     )
 }

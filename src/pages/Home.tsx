@@ -54,13 +54,15 @@ const Home: React.FC = () => {
         return true;
     })
     return (
-        <div>
-            <h1>Todo App</h1>
-            <TodoInput onAdd={handleAdd} />
-                {/* 这里展示过滤栏 */}
-            <FilterBar filter={filter} onChange={setFilter} />
-                {/* 这里展示待办事项列表 */}
-            <TodoList todos={filteredTodos} onToggle={handleToggle} onDelete={handleDelete} />
+        <div className='min-h-screen bg-gray-100 flex justify-center p-8'>
+            <div className='w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8'>
+                <h1 className='text-3xl font-bold text-center mb-6'>Todo App</h1>
+                <TodoInput onAdd={handleAdd} />
+                    {/* 这里展示过滤栏 */}
+                <FilterBar filter={filter} onChange={setFilter} />
+                    {/* 这里展示待办事项列表 */}
+                <TodoList todos={filteredTodos} onToggle={handleToggle} onDelete={handleDelete} />
+            </div>
         </div>
     )
 }
