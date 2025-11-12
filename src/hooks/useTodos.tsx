@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Todo } from '../types/todo';
 import { getTodo, addTodo, updateTodo, deleteTodo } from '../api/todoApi';
 
@@ -46,7 +46,8 @@ export const useTodos = () => {
     };
 
     // 🔹 离线队列同步
-    const syncOfflineQueue = async () => {
+    // 使用 useCallback 缓存 syncOfflineQueue 函数
+    const syncOfflineQueue = useCallback(async () => {
         if (offlineQueue.length === 0) return;
 
         console.log('🔄 尝试同步离线操作：', offlineQueue);
@@ -76,13 +77,13 @@ export const useTodos = () => {
 
         updateTodos(newTodos);
         setOfflineQueue(remainingQueue);
-    };
+    }, [offlineQueue, todos]); // 添加所有依赖项
 
-    // 🔹 定时同步（每 5 秒尝试一次）
+    // 定时同步（每 5 秒尝试一次）
     useEffect(() => {
         const timer = setInterval(syncOfflineQueue, 5000);
         return () => clearInterval(timer);
-    }, [offlineQueue, todos]);
+    }, [syncOfflineQueue]); // 现在只需要依赖 syncOfflineQueue
 
     // 🔹 添加待办
     const handleAdd = (title: string) => {

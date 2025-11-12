@@ -3,12 +3,7 @@
     {
       "id": "c211",
       "title": "测试toggle1",
-      "completed": false
-    },
-    {
-      "id": "aa50",
-      "title": "测试toggle2",
-      "completed": false
+      "completed": true
     },
     {
       "id": "9994",
