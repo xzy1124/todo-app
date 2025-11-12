@@ -6,8 +6,9 @@ export interface TodoListProps {
     todos: Todo[]; //需要一个待办数组，让子组件知道要显示哪些待办
     onToggle: (id: number) => void; //切换事件，获取id作为参数，返回一个空函数
     onDelete: (id: number) => void; //删除事件，获取id作为参数，返回一个空函数
+    searchTerm?: string; //搜索关键词
 }
-const TodoList: React.FC<TodoListProps> = ({todos, onToggle, onDelete}) => {
+const TodoList: React.FC<TodoListProps> = ({todos, onToggle, onDelete, searchTerm}) => {
     return (
         <div className='bg-white rounded-xl shadow p-4 mt-6'>
             {todos.length === 0 ? (
@@ -21,6 +22,7 @@ const TodoList: React.FC<TodoListProps> = ({todos, onToggle, onDelete}) => {
                                 todo={todo}
                                 onToggle={onToggle}
                                 onDelete={onDelete}
+                                searchTerm={searchTerm}
                             />
                         </div>
                     ))}

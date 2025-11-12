@@ -11,8 +11,27 @@ export interface TodoItemProps {
     onDelete: (id: number) => void; //删除事件，获取id作为参数，返回一个空函数
     //只传id,是用户点击之后我们传给父组件，父组件再用useState更新状态，调API
     // 子组件永远不修改全局数据，而是告诉父组件怎么改
+        // 添加高亮逻辑，这是作用在item身上的，所以它应当有这个属性
+    searchTerm?: string  //搜索关键词
 }
-const TodoItem: React.FC<TodoItemProps> = ({todo, onToggle, onDelete}) => {
+const TodoItem: React.FC<TodoItemProps> = ({todo, onToggle, onDelete, searchTerm = ""}) => {
+    // 实现高亮函数
+    const highlightTitle = (title: string, searchTerm: string) => {
+        if(!searchTerm) return title; //如果没有搜索关键词，直接返回标题
+        const regex = new RegExp(`(${searchTerm})`, "gi"); //动态创建正则表达式，全局，不区分大小写
+        // split遇到带有括号的正则表达式，会把括号里的内容也分出来
+        return title.split(regex).map((part, index) => {
+            return regex.test(part) ? (
+                <mark
+                    key={index}
+                    className='bg-yellow-200 dark:bg-yellow-500 text-black dark:text-white px-1 rounded'>
+                        {part}
+                </mark>
+            ) : (
+                part
+            )
+        })
+    }
     return (
         <div className='
             flex items-center justify-between
@@ -32,7 +51,8 @@ const TodoItem: React.FC<TodoItemProps> = ({todo, onToggle, onDelete}) => {
                 <span 
                     className={`text-lg ${todo.completed ? "line-through text-gray-400" : "text-gray-700"}`}
                 >
-                    {todo.title}
+                    {/* 一开始searchTerm可以是空的也就是undefined,所以我们给了初始值 */}
+                    {highlightTitle(todo.title, searchTerm)} 
                 </span>
             </div>
             <button 

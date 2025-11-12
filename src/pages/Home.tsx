@@ -20,7 +20,7 @@ const Home: React.FC = () => {
         //创建一个函数，把搜索框的内容延迟300毫秒后赋值给debounceSearch
         const handle = setTimeout(() => {
             setDebounceSearch(search)
-        }, 3000)
+        }, 300)
         return () => clearTimeout(handle)
     }, [search])
     
@@ -87,7 +87,7 @@ const Home: React.FC = () => {
                 />
                 <FilterBar filter={filter} onChange={setFilter} />
                     {/* 这里展示待办事项列表,(根据过滤状态和搜索框的内容进行筛选,我搜什么就能出现什么) */}
-                <TodoList todos={filteredTodos} onToggle={handleToggle} onDelete={handleDelete} />
+                <TodoList todos={filteredTodos} onToggle={handleToggle} onDelete={handleDelete} searchTerm={debounceSearch} />
             </div>
         </div>
     )
