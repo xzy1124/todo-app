@@ -3,4 +3,7 @@ export interface Todo {
     id: number;
     title: string;
     completed: boolean;
+    deadline?: string;
+    priority?: 'high' | 'medium' | 'low';
+    group?: string;
 }

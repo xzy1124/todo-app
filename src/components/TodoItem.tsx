@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import type { Todo } from '../types/todo';
 //这是每一个待办事项的实现,其实是每条待办需要的外部输入
 /**
@@ -31,6 +31,23 @@ const TodoItem: React.FC<TodoItemProps> = ({todo, onToggle, onDelete, searchTerm
                 part
             )
         })
+    }
+    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(todo.deadline));
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTimeLeft(calculateTimeLeft(todo.deadline))
+        }, 1000)
+        return () => clearInterval(timer)
+    }, [todo.deadline])
+    //实现倒计时函数
+    function calculateTimeLeft(deadline?:string) {
+        if(!deadline) return null
+        const diff = new Date(deadline).getTime() - Date.now()
+        if(diff <= 0) return '已超时'
+        const hour = Math.floor(diff / 1000 / 60 / 60)
+        const minutes = Math.floor((diff / 1000 / 60) % 60)
+        const seconds = Math.floor((diff / 1000) % 60)
+        return `${hour}时${minutes}分${seconds}秒`
     }
     return (
         <div className='
@@ -65,6 +82,10 @@ const TodoItem: React.FC<TodoItemProps> = ({todo, onToggle, onDelete, searchTerm
             >
                 删除
             </button>
+            {/* 显示倒计时 */}
+            <span className={`ml-2 font-mono ${timeLeft === '已超时' ? 'text-red-500' : 'text-gray-500'}`}>
+                {timeLeft}
+            </span>
         </div>
     )
 }

@@ -93,13 +93,13 @@ export const useTodos = () => {
     }, [syncOfflineQueue]); // 现在只需要依赖 syncOfflineQueue
 
     // 🔹 添加待办
-    const handleAdd = (title: string) => {
+    const handleAdd = (title: string, deadline?: string) => {
         const tempId = Date.now();
-        const newTodo: Todo = { id: tempId, title, completed: false };
+        const newTodo: Todo = { id: tempId, title, completed: false, deadline };
 
         updateTodos(prev => [newTodo, ...prev]);
 
-        addTodo(title)
+        addTodo(title, deadline)
             .then(res => {
                 updateTodos(prev =>
                     prev.map(todo => (todo.id === tempId ? res.data : todo))

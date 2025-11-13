@@ -2,13 +2,14 @@
 import React, { useState } from 'react'
 //输入框的属性，有内容吧，
 export interface TodoInputProps {
-    onAdd: (title:string) => void; //新增事件获取标题作为参数，返回一个空函数
+    onAdd: (title:string, deadline?: string) => void; //新增事件获取标题作为参数，返回一个空函数
 }
 //TodoInput 是一个 React 函数组件,它的 props 类型是 TodoInputProps,它的参数是一个对象，我们从里面解构出 onAdd
 const TodoInput: React.FC<TodoInputProps> = (props) => {
     const {onAdd} = props;
     //定义状态管理标题
     const [title, setTitle] = useState('');
+    const [deadline, setDeadline] = useState('');
     //实现点击添加事件
     const handleAdd = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -16,9 +17,11 @@ const TodoInput: React.FC<TodoInputProps> = (props) => {
         // 如果标题为空，就不调用新增事件，也不清空标题
         if(!title.trim()) return;
         //调用新增事件,并传递标题,传到父组件那里去了
-        onAdd(title);
+        onAdd(title, deadline || undefined);
         //清空标题
         setTitle('');
+        //清空截止时间
+        setDeadline('');
     }
     // return (
     //     <div>
@@ -39,6 +42,15 @@ const TodoInput: React.FC<TodoInputProps> = (props) => {
                 onChange={(e) => setTitle(e.target.value)}
                 className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
                 placeholder="Add a new todo..."
+            />
+            {/* 新增截至时间的输入 */}
+            <input
+                type="datetime-local"
+                value={deadline}
+                onChange={(e) => setDeadline(e.target.value)}
+                // 选择onBlur事件，当输入框失去焦点时触发
+                onBlur={(e) => setDeadline(e.target.value)}
+                className="border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
             />
             <button
                 type="submit"

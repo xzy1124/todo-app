@@ -5,7 +5,7 @@ const API_URL = 'http://localhost:3001/todos'
 //获取所有事项
 export const getTodo = () => axios.get<Todo[]>(API_URL)
 //添加事项,添加title和completed属性
-export const addTodo = (title: string) => axios.post<Todo>(API_URL, { title, completed: false })
+export const addTodo = (title: string, deadline?: string) => axios.post<Todo>(API_URL, { title, completed: false, deadline })
 //修改，要根据id修改,修改之后的数据还是个待办事项的对象
 export const updateTodo = (id: number, data: Partial<Todo>) => axios.patch<Todo>(`${API_URL}/${id}`, data)
 // 删除，也是一月，的根据id，但是应该不需要返回新对象了
