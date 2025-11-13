@@ -49,6 +49,15 @@ const TodoItem: React.FC<TodoItemProps> = ({todo, onToggle, onDelete, searchTerm
         const seconds = Math.floor((diff / 1000) % 60)
         return `${hour}时${minutes}分${seconds}秒`
     }
+    const groupColor: Record<string, string> = {
+        work: 'text-blue-500',
+        personal: 'text-green-500',
+        food: 'text-red-500',
+        travel: 'text-purple-500',
+        sport: 'text-orange-500',
+        study: 'text-indigo-500',
+        other: 'text-gray-500',
+    };
     return (
         <div className='
             flex items-center justify-between
@@ -85,6 +94,10 @@ const TodoItem: React.FC<TodoItemProps> = ({todo, onToggle, onDelete, searchTerm
             {/* 显示倒计时 */}
             <span className={`ml-2 font-mono ${timeLeft === '已超时' ? 'text-red-500' : 'text-gray-500'}`}>
                 {timeLeft}
+            </span>
+            {/* 显示分类 */}
+            <span className={`ml-2 font-mono text-sm ${groupColor[todo.group || 'other']}`}>
+                {todo.group || 'Other'}
             </span>
         </div>
     )
