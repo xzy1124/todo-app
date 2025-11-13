@@ -6,6 +6,7 @@ import Toast from '../common/toast/Toast';
 import {useNetworkStatus} from '../hooks/useNetworkStatus';
 const Home: React.FC = () => {
     const {
+        //这样todos拿到的就是排好序的数组
         todos,
         filter,
         setFilter,

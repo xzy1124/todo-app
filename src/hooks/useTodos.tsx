@@ -166,9 +166,16 @@ export const useTodos = () => {
             return true;
         })
         .filter(todo => todo.title.toLowerCase().includes(normalizedSearch));
+    // 排序
+    const sortedTodos = filteredTodos.sort((a, b) => {
+        if(!a.deadline) return 1
+        if(!b.deadline) return -1
+        return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+    })
 
     return {
-        todos: filteredTodos,
+        // 之前返回的就是过滤好的，现在返回的是排序好的数组
+        todos: sortedTodos,
         filter,
         setFilter,
         search,
