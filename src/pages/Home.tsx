@@ -9,6 +9,8 @@ const Home: React.FC = () => {
         filter,
         setFilter,
         search,
+        toastMessage,
+        showToast,
         setSearch,
         handleAdd,
         offlineQueue,
@@ -23,6 +25,12 @@ const Home: React.FC = () => {
                 {isOnline ? '🌐 在线' : '📴 离线'}
                 {offlineQueue.length > 0 && ` | 待同步 ${offlineQueue.length} 条`}
             </div>
+            {/* 弹窗提示 */}
+            {showToast && (
+                <div className='absolute top-16 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-md'>
+                    {toastMessage}
+                </div>
+            )}
             <div className='w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8'>
                 <h1 className='text-3xl font-bold text-center mb-6'>Todo App</h1>
                 <TodoInput onAdd={handleAdd} />

@@ -13,6 +13,9 @@ export const useTodos = () => {
     const [search, setSearch] = useState('');
     const [debounceSearch, setDebounceSearch] = useState('');
     const [offlineQueue, setOfflineQueue] = useState<OfflineAction[]>([]);
+    //添加弹窗提示
+    const [toastMessage, setToastMessage] = useState('');
+    const [showToast,setShowToast] = useState(false);
 
     // 🔹 搜索防抖
     useEffect(() => {
@@ -140,6 +143,10 @@ export const useTodos = () => {
                     { type: 'delete', todo: { ...current } }
                 ]);
             });
+        // 添加弹窗提示
+        setToastMessage('拜拜咯');
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 2000);
     };
 
     // 🔹 筛选 + 搜索
@@ -157,6 +164,8 @@ export const useTodos = () => {
         filter,
         setFilter,
         search,
+        toastMessage,
+        showToast,
         setSearch,
         handleAdd,
         handleToggle,
