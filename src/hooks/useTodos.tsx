@@ -6,6 +6,11 @@ export interface OfflineAction {
     type: 'add' | 'update' | 'delete';
     todo: Todo;
 }
+interface ToastItem {
+    id: number;
+    message: string;
+    type?: 'success' | 'error' | 'info' | 'warning';
+}
 
 export const useTodos = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
@@ -14,8 +19,7 @@ export const useTodos = () => {
     const [debounceSearch, setDebounceSearch] = useState('');
     const [offlineQueue, setOfflineQueue] = useState<OfflineAction[]>([]);
     //添加弹窗提示
-    const [toastMessage, setToastMessage] = useState('');
-    const [showToast,setShowToast] = useState(false);
+    const [toasts, setToasts] = useState<ToastItem[]>([]);
 
     // 🔹 搜索防抖
     useEffect(() => {
@@ -143,10 +147,14 @@ export const useTodos = () => {
                     { type: 'delete', todo: { ...current } }
                 ]);
             });
-        // 添加弹窗提示
-        setToastMessage('拜拜咯');
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 2000);
+        // 添加toast
+        const newToast: ToastItem = {
+            id: Date.now(),
+            message: '删除成功',
+            type: 'success',
+        }
+        setToasts(prev => [...prev, newToast]);
+        // setTimeout(() => setShowToast(false), 2000);
     };
 
     // 🔹 筛选 + 搜索
@@ -164,8 +172,8 @@ export const useTodos = () => {
         filter,
         setFilter,
         search,
-        toastMessage,
-        showToast,
+        toasts,
+        setToasts,
         setSearch,
         handleAdd,
         handleToggle,

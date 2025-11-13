@@ -1,0 +1,71 @@
+.toast {
+    position: fixed;
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    animation: fadeInOut 0.5s forwards;
+    z-index: 9999;
+}
+/* 类型颜色 */
+.success {
+    background-color: #22c55e;
+}
+
+.error {
+    background-color: #ef4444;
+}
+
+.warning {
+    background-color: #f59e0b;
+}
+
+.info {
+    background-color: #3b82f6;
+}
+
+/* 位置 */
+.top-right {
+    top: 20px;
+    right: 20px;
+}
+
+.top-left {
+    top: 20px;
+    left: 20px;
+}
+
+.bottom-right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.bottom-left {
+    bottom: 20px;
+    left: 20px;
+}
+
+/* 动画 */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}

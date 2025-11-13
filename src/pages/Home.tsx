@@ -2,6 +2,7 @@ import TodoList from '../components/TodoList';
 import FilterBar from '../components/FilterBar';
 import TodoInput from '../components/TodoInput';
 import {useTodos} from '../hooks/useTodos';
+import Toast from '../common/toast/Toast';
 import {useNetworkStatus} from '../hooks/useNetworkStatus';
 const Home: React.FC = () => {
     const {
@@ -9,8 +10,8 @@ const Home: React.FC = () => {
         filter,
         setFilter,
         search,
-        toastMessage,
-        showToast,
+        toasts,
+        setToasts,
         setSearch,
         handleAdd,
         offlineQueue,
@@ -26,11 +27,18 @@ const Home: React.FC = () => {
                 {offlineQueue.length > 0 && ` | 待同步 ${offlineQueue.length} 条`}
             </div>
             {/* 弹窗提示 */}
-            {showToast && (
-                <div className='absolute top-16 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-md'>
-                    {toastMessage}
-                </div>
-            )}
+            <div className='fixed top-4 right-4 z-50 flex flex-col gap-2'>
+                {toasts.map(toast => (
+                    <Toast
+                        key={toast.id}
+                        message={toast.message}
+                        type={toast.type}
+                        duration={2000}
+                        onClose={() => setToasts(prev => prev.filter(t => t.id !== toast.id))}
+                    />
+                ))}
+
+            </div>
             <div className='w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8'>
                 <h1 className='text-3xl font-bold text-center mb-6'>Todo App</h1>
                 <TodoInput onAdd={handleAdd} />
