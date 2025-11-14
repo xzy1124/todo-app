@@ -1,38 +1,56 @@
+// src/pages/Login.tsx
 import React, { useState } from 'react';
 import { login } from '../api/authApi';
 import { useNavigate } from 'react-router-dom';
+
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    // 表单一提交触发的事件
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        try{
+        try {
             const res = await login(username, password);
-            localStorage.setItem('token', res.data.token); //把token存在localStorage中
-            localStorage.setItem('userId', res.data.userId.toString()); //把userId存在localStorage中
-            // 登录成功后跳转到首页
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('userId', res.data.userId.toString());
             navigate('/');
         } catch (error) {
             console.log(error);
             alert('登录失败');
         }
-    }
-  return (
-      <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column' }}>
-        <input 
-            type="text" 
-            placeholder="用户名" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} />
-        <input 
-            type="password" 
-            placeholder="密码" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">登录</button>
-    </form>
-  );
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-white">
+            <form
+                onSubmit={handleLogin}
+                className="bg-white p-8 rounded-lg shadow-lg w-80 flex flex-col gap-4"
+            >
+                <h2 className="text-2xl font-bold text-center mb-4">登录</h2>
+                <input
+                    type="text"
+                    placeholder="用户名"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <input
+                    type="password"
+                    placeholder="密码"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <button
+                    type="submit"
+                    className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
+                >
+                    登录
+                </button>
+            </form>
+        </div>
+    );
 };
+
 export default Login;

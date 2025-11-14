@@ -27,7 +27,10 @@ body {
   margin: 0;
   display: flex;
   /* place-items: center; */
-  align-items: flex-start;
+  /* flex-start使得flex容器中的项目也就是页面内容从顶部开始对齐，而不是垂直居中 */
+  /* align-items: flex-start; */
+  justify-content: center;
+  align-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
