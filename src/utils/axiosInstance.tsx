@@ -2,7 +2,7 @@ import axios from 'axios';
 // 创建axios实例
 const axiosInstance = axios.create({
     baseURL: "http://localhost:3001",
-    timeout: 5000,
+    timeout: 5000, //请求超过5秒没返回，axios就当作失败，报ECONNABORTED超时错误
 })
 // 配置请求拦截器
 axiosInstance.interceptors.request.use((config) => {
