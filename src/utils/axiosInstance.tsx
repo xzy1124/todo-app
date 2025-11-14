@@ -1,7 +1,7 @@
 import axios from 'axios';
 // 创建axios实例
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "http://localhost:3001",
     timeout: 5000,
 })
 // 配置请求拦截器
