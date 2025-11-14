@@ -166,12 +166,38 @@ export const useTodos = () => {
             return true;
         })
         .filter(todo => todo.title.toLowerCase().includes(normalizedSearch));
-    // 排序
+    //🔹  排序
     const sortedTodos = filteredTodos.sort((a, b) => {
         if(!a.deadline) return 1
         if(!b.deadline) return -1
         return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
     })
+    // 🔹 添加全部完成功能
+    const handleAllComplete = () => {
+        // 1️⃣ 更新本地 todos
+        updateTodos(prev => prev.map(todo => ({ ...todo, completed: true })));
+
+        // 2️⃣ 同步到服务器 / 离线队列
+        todos.forEach(todo => {
+            if (!todo.completed) { // 只处理原本未完成的
+                updateTodo(todo.id, { completed: true }).catch(() => {
+                    setOfflineQueue(q => [...q, { type: 'update', todo: { ...todo, completed: true } }]);
+                });
+            }
+        });
+    }
+    // 🔹 添加全部删除功能
+    const handleAllDelete = () => {
+        // 先处理服务器/离线同步
+        todos.forEach(todo => {
+            deleteTodo(todo.id).catch(() => {
+                setOfflineQueue(q => [...q, { type: 'delete', todo }]);
+            });
+        });
+
+        // 然后本地清空
+        updateTodos([]);
+    }
 
     return {
         // 之前返回的就是过滤好的，现在返回的是排序好的数组
@@ -186,5 +212,7 @@ export const useTodos = () => {
         handleToggle,
         handleDelete,
         offlineQueue,
+        handleAllComplete,
+        handleAllDelete,
     };
 };

@@ -18,6 +18,8 @@ const Home: React.FC = () => {
         offlineQueue,
         handleToggle,
         handleDelete,
+        handleAllComplete,
+        handleAllDelete,
     } = useTodos();
     const isOnline = useNetworkStatus();
     return (
@@ -43,8 +45,7 @@ const Home: React.FC = () => {
             <div className='w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8'>
                 <h1 className='text-3xl font-bold text-center mb-6'>Todo App</h1>
                 <TodoInput onAdd={handleAdd} />
-                    {/* 这里展示过滤栏 */}
-                        {/* 这里加一个输入框 */}
+                {/* 这里加一个输入框 */}
                 <input 
                     type="text"
                     placeholder='搜索待办...'
@@ -53,7 +54,17 @@ const Home: React.FC = () => {
                     onChange={(e) => setSearch(e.target.value)}
                     
                 />
+                {/* 这里展示过滤栏 */}
                 <FilterBar filter={filter} onChange={setFilter} />
+                {/* 这里展示全部完成或者全部删除的按钮吧 */}
+                <div className="flex gap-3 mb-4">
+                    <button onClick={handleAllComplete} className="px-4 py-2 bg-green-500 text-gray-800 rounded-lg hover:bg-green-600">
+                        全部完成
+                    </button>
+                    <button onClick={handleAllDelete} className="px-4 py-2 bg-red-500 text-gray-800 rounded-lg hover:bg-red-600">
+                        全部删除
+                    </button>
+                </div>
                     {/* 这里展示待办事项列表,(根据过滤状态和搜索框的内容进行筛选,我搜什么就能出现什么) */}
                 <TodoList todos={todos} onToggle={handleToggle} onDelete={handleDelete} searchTerm={search} />
             </div>

@@ -79,7 +79,7 @@ const TodoInput: React.FC<TodoInputProps> = (props) => {
             </div>
             <button
                 type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                className="px-4 py-2 bg-blue-500 text-gray-800 rounded-lg hover:bg-blue-600 transition"
             >
                 Add
             </button>

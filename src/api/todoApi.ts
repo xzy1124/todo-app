@@ -1,15 +1,15 @@
-import axios from 'axios'
 import type { Todo } from '../types/todo'
+import axiosInstance from '../utils/axiosInstance'
 //定义基准路径，都以这个开头
-const API_URL = 'http://localhost:3001/todos'
+const API_URL = '/todos'
 //获取所有事项
-export const getTodo = () => axios.get<Todo[]>(API_URL)
+export const getTodo = () => axiosInstance.get<Todo[]>(API_URL)
 //添加事项,添加title和completed属性
-export const addTodo = (title: string, deadline?: string, group?: string) => axios.post<Todo>(API_URL, { title, completed: false, deadline, group })
+export const addTodo = (title: string, deadline?: string, group?: string) => axiosInstance.post<Todo>(API_URL, { title, completed: false, deadline, group })
 //修改，要根据id修改,修改之后的数据还是个待办事项的对象
-export const updateTodo = (id: number, data: Partial<Todo>) => axios.patch<Todo>(`${API_URL}/${id}`, data)
-// 删除，也是一月，的根据id，但是应该不需要返回新对象了
-export const deleteTodo = (id: number) => axios.delete(`${API_URL}/${id}`)
+export const updateTodo = (id: number, data: Partial<Todo>) => axiosInstance.patch<Todo>(`${API_URL}/${id}`, data)
+// 删除，也是一样的根据id，但是应该不需要返回新对象了
+export const deleteTodo = (id: number) => axiosInstance.delete(`${API_URL}/${id}`)
 // 这里的API-URL也用模板字符串是因为统一规范
 // axios.patch(url, body) 这种写法是 axios 规范，不是语法规定。
 // 它的作用是部分更新资源，而不是整体替换。
