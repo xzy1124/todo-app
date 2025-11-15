@@ -4,6 +4,7 @@ import TodoInput from '../components/TodoInput';
 import {useTodos} from '../hooks/useTodos';
 import Toast from '../common/toast/Toast';
 import {useNetworkStatus} from '../hooks/useNetworkStatus';
+import { X } from "lucide-react";
 const Home: React.FC = () => {
     const {
         //这样todos拿到的就是排好序的数组
@@ -46,14 +47,25 @@ const Home: React.FC = () => {
                 <h1 className='text-3xl font-bold text-center mb-6'>Todo App</h1>
                 <TodoInput onAdd={handleAdd} />
                 {/* 这里加一个输入框 */}
-                <input 
-                    type="text"
-                    placeholder='搜索待办...'
-                    className='w-full p-2 border rounded mb-4'
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    
-                />
+                <div className="relative mb-4">
+                    <input
+                        type="text"
+                        placeholder="搜索待办..."
+                        className="w-full p-2 pr-10 border rounded"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+
+                    {search && (
+                        <button
+                            onClick={() => setSearch('')}
+                            className="absolute right-2 top-1/2 -translate-y-1/2"
+                        >
+                            <X size={17} className="text-gray-400 hover:text-black" />
+                        </button>
+                    )}
+                </div>
+            
                 {/* 这里展示过滤栏 */}
                 <FilterBar filter={filter} onChange={setFilter} />
                 {/* 这里展示全部完成或者全部删除的按钮吧 */}
