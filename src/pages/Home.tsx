@@ -5,6 +5,7 @@ import {useTodos} from '../hooks/useTodos';
 import Toast from '../common/toast/Toast';
 import {useNetworkStatus} from '../hooks/useNetworkStatus';
 import { X } from "lucide-react";
+import TodoStats from './TodoStatus';
 const Home: React.FC = () => {
     const {
         //这样todos拿到的就是排好序的数组
@@ -44,6 +45,8 @@ const Home: React.FC = () => {
 
             </div>
             <div className='w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8'>
+                    {/* 注意！！！这里是测试TodoStatus组件的 */}
+                <TodoStats />
                 <h1 className='text-3xl font-bold text-center mb-6'>Todo App</h1>
                 <TodoInput onAdd={handleAdd} />
                 {/* 这里加一个输入框 */}
