@@ -30,7 +30,35 @@ function auth(req, res, next) {
         next();
     });
 }
-
+// ----注册接口 ----
+app.post('/register', async (req, res) => {
+    try {
+        // 这就是从前端注册页面提交的用户名和密码取出来做判断
+        const {username, password} = req.body
+        if(!username || !password){
+            return res.status(400).json({message: "用户名或密码不能为空"})
+        }
+        const exists = users.find(u => u.username === username)
+        if(exists){
+            return res.status(400).json({message: "用户名已存在"})
+        }
+        // 为新用户分配一个唯一的ID,从已有的用户对象id中取出一个最大的加1，要是没有就直接id为1
+        const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
+        const hashed = await bcrypt.hash(password, 10) //这里的10是盐的长度，盐的长度越大，加密的结果就越复杂
+        // 把新对象整合一下，包括id，用户名，密码
+        const newUser = {
+            id: newId,
+            username,
+            password: hashed
+        }
+        users.push(newUser)
+        save("users.json", users)
+        res.status(201).json({message: "注册成功"})
+    }catch (err) {
+        console.error(err)
+        res.status(500).json({message: "服务器内部错误"})
+    }
+})
 // ---- 登录接口 ----
 app.post("/login", async (req, res) => {
     try {

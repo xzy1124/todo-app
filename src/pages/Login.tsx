@@ -44,10 +44,19 @@ const Login: React.FC = () => {
                 />
                 <button
                     type="submit"
-                    className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
+                    className="bg-blue-500 text-gray-800 py-2 rounded hover:bg-blue-600 transition-colors"
                 >
                     登录
                 </button>
+                <button
+                    type="button"
+                    // 点击注册按钮就跳转到注册页面，只跳转不考虑逻辑
+                    onClick={() => navigate('/register')}
+                    className="bg-green-500 text-gray-800 py-2 rounded hover:bg-green-600 transition-colors"
+                >
+                    注册
+                </button>
+
             </form>
         </div>
     );

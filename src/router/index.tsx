@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
+import Register from '../pages/Register';
 // 左边参数解构等价于(props) => {
 // const children = props.children;
 // }
@@ -19,6 +20,8 @@ export default function AppRouter() {
                 <Route 
                     path='/'
                     element={<PrivateRoute><Home /></PrivateRoute>} />
+                    {/* 反正以后有了路由组件，都是添加到这里注册路由的 */}
+                <Route path='/register' element={<Register />} />
             </Routes>
         </BrowserRouter>
     )
