@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { useTodos } from "../hooks/useTodos";
-
+// import { useTodos } from "../hooks/useTodos";
+import { useTodoStore } from "../store/todoStore";
 const TodoStats: React.FC = () => {
-    const { todos, handleAdd } = useTodos(); // ❌ 注意这里是 useTodos
+    // const { todos, handleAdd } = useTodos(); // ❌ 注意这里是 useTodos
+    const { todos, addTodo } = useTodoStore();
     const [newTitle, setNewTitle] = useState("");
 
     const handleAddClick = () => {
         if (!newTitle) return;
-        handleAdd(newTitle);
+        addTodo(newTitle);
         setNewTitle("");
     };
 

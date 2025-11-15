@@ -1,37 +1,75 @@
 import TodoList from '../components/TodoList';
 import FilterBar from '../components/FilterBar';
 import TodoInput from '../components/TodoInput';
-import {useTodos} from '../hooks/useTodos';
+import { useTodoStore } from '../store/todoStore';
 import Toast from '../common/toast/Toast';
-import {useNetworkStatus} from '../hooks/useNetworkStatus';
-import { X } from "lucide-react";
+import { useNetworkStatus } from '../hooks/useNetworkStatus';
+import { X } from 'lucide-react';
 import TodoStats from './TodoStatus';
+import { useEffect, useState } from 'react';
+
 const Home: React.FC = () => {
-    const {
-        //这样todos拿到的就是排好序的数组
-        todos,
-        filter,
-        setFilter,
-        search,
-        toasts,
-        setToasts,
-        setSearch,
-        handleAdd,
-        offlineQueue,
-        handleToggle,
-        handleDelete,
-        handleAllComplete,
-        handleAllDelete,
-    } = useTodos();
     const isOnline = useNetworkStatus();
+
+    const {
+        todos,
+        offlineQueue,
+        fetchTodos,
+        addTodo,
+        toggleTodo,
+        deleteTodo,
+        completeAll,
+        deleteAll,
+        syncTodos,
+    } = useTodoStore();
+
+    // 搜索状态和防抖
+    const [search, setSearch] = useState('');
+    const [debounceSearch, setDebounceSearch] = useState('');
+    useEffect(() => {
+        const handle = setTimeout(() => setDebounceSearch(search), 300);
+        return () => clearTimeout(handle);
+    }, [search]);
+
+    // 初始加载 todos
+    useEffect(() => {
+        fetchTodos();
+    }, [fetchTodos]);
+
+    // 定时离线同步
+    useEffect(() => {
+        const timer = setInterval(syncTodos, 5000);
+        return () => clearInterval(timer);
+    }, [syncTodos]);
+
+    // 筛选 + 搜索 + 排序
+    const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+    const normalizedSearch = debounceSearch.trim().toLowerCase();
+    const filteredTodos = todos
+        .filter(todo => {
+            if (filter === 'active') return !todo.completed;
+            if (filter === 'completed') return todo.completed;
+            return true;
+        })
+        .filter(todo => todo.title.toLowerCase().includes(normalizedSearch))
+        .sort((a, b) => {
+            if (!a.deadline) return 1;
+            if (!b.deadline) return -1;
+            return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+        });
+
+    // Toast 管理
+    const [toasts, setToasts] = useState<{ id: number; message: string; type?: 'success' | 'error' | 'info' | 'warning' }[]>([]);
+
     return (
         <div className='min-h-screen bg-gray-100 flex justify-center p-8'>
-            {/* 状态栏 */}
+            {/* 网络状态 */}
             <div className="absolute top-4 right-4 text-sm font-medium">
                 {isOnline ? '🌐 在线' : '📴 离线'}
                 {offlineQueue.length > 0 && ` | 待同步 ${offlineQueue.length} 条`}
             </div>
-            {/* 弹窗提示 */}
+
+            {/* 弹窗 */}
             <div className='fixed top-4 right-4 z-50 flex flex-col gap-2'>
                 {toasts.map(toast => (
                     <Toast
@@ -42,23 +80,29 @@ const Home: React.FC = () => {
                         onClose={() => setToasts(prev => prev.filter(t => t.id !== toast.id))}
                     />
                 ))}
-
             </div>
+
             <div className='w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8'>
-                    {/* 注意！！！这里是测试TodoStatus组件的 */}
                 <TodoStats />
                 <h1 className='text-3xl font-bold text-center mb-6'>Todo App</h1>
-                <TodoInput onAdd={handleAdd} />
-                {/* 这里加一个输入框 */}
+
+                {/* 输入框 */}
+                <TodoInput
+                    onAdd={(title, deadline, group) => {
+                        addTodo(title, deadline, group);
+                        setToasts(prev => [...prev, { id: Date.now(), message: '添加成功', type: 'success' }]);
+                    }}
+                />
+
+                {/* 搜索 */}
                 <div className="relative mb-4">
                     <input
                         type="text"
                         placeholder="搜索待办..."
                         className="w-full p-2 pr-10 border rounded"
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={e => setSearch(e.target.value)}
                     />
-
                     {search && (
                         <button
                             onClick={() => setSearch('')}
@@ -68,22 +112,20 @@ const Home: React.FC = () => {
                         </button>
                     )}
                 </div>
-            
-                {/* 这里展示过滤栏 */}
+
                 <FilterBar filter={filter} onChange={setFilter} />
-                {/* 这里展示全部完成或者全部删除的按钮吧 */}
+
+                {/* 全部操作按钮 */}
                 <div className="flex gap-3 mb-4">
-                    <button onClick={handleAllComplete} className="px-4 py-2 bg-green-500 text-gray-800 rounded-lg hover:bg-green-600">
-                        全部完成
-                    </button>
-                    <button onClick={handleAllDelete} className="px-4 py-2 bg-red-500 text-gray-800 rounded-lg hover:bg-red-600">
-                        全部删除
-                    </button>
+                    <button onClick={completeAll} className="px-4 py-2 bg-green-500 text-gray-800 rounded-lg hover:bg-green-600">全部完成</button>
+                    <button onClick={deleteAll} className="px-4 py-2 bg-red-500 text-gray-800 rounded-lg hover:bg-red-600">全部删除</button>
                 </div>
-                    {/* 这里展示待办事项列表,(根据过滤状态和搜索框的内容进行筛选,我搜什么就能出现什么) */}
-                <TodoList todos={todos} onToggle={handleToggle} onDelete={handleDelete} searchTerm={search} />
+
+                {/* Todo 列表 */}
+                <TodoList todos={filteredTodos} onToggle={toggleTodo} onDelete={deleteTodo} searchTerm={debounceSearch} />
             </div>
         </div>
-    )
-}
+    );
+};
+
 export default Home;
