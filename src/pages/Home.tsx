@@ -2,6 +2,7 @@ import TodoList from '../components/TodoList';
 import FilterBar from '../components/FilterBar';
 import TodoInput from '../components/TodoInput';
 import { useTodoStore } from '../store/todoStore';
+import { useToastStore } from '../store/toastStore';
 import Toast from '../common/toast/Toast';
 import { useNetworkStatus } from '../hooks/useNetworkStatus';
 import { X } from 'lucide-react';
@@ -22,7 +23,8 @@ const Home: React.FC = () => {
         deleteAll,
         syncTodos,
     } = useTodoStore();
-
+    // 从仓库里取出要用的toast数据和要用的工具来操作toast
+    const {toasts, addToast, removeToast} = useToastStore();
     // 搜索状态和防抖
     const [search, setSearch] = useState('');
     const [debounceSearch, setDebounceSearch] = useState('');
@@ -59,8 +61,8 @@ const Home: React.FC = () => {
         });
 
     // Toast 管理
-    const [toasts, setToasts] = useState<{ id: number; message: string; type?: 'success' | 'error' | 'info' | 'warning' }[]>([]);
-
+    // const [toasts, setToasts] = useState<{ id: number; message: string; type?: 'success' | 'error' | 'info' | 'warning' }[]>([]);
+        
     return (
         <div className='min-h-screen bg-gray-100 flex justify-center p-8'>
             {/* 网络状态 */}
@@ -77,7 +79,7 @@ const Home: React.FC = () => {
                         message={toast.message}
                         type={toast.type}
                         duration={2000}
-                        onClose={() => setToasts(prev => prev.filter(t => t.id !== toast.id))}
+                        onClose={() => removeToast(toast.id)}
                     />
                 ))}
             </div>
@@ -90,7 +92,7 @@ const Home: React.FC = () => {
                 <TodoInput
                     onAdd={(title, deadline, group) => {
                         addTodo(title, deadline, group);
-                        setToasts(prev => [...prev, { id: Date.now(), message: '添加成功', type: 'success' }]);
+                        addToast('添加成功', 'success');
                     }}
                 />
 

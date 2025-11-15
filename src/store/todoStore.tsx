@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Todo } from '../types/todo';
 import { addTodo as apiAdd, updateTodo as apiUpdate, deleteTodo as apiDelete, getTodo as apiGet } from '../api/todoApi';
+import { useToastStore } from './toastStore';
 
 export interface OfflineAction {
     type: 'add' | 'update' | 'delete';
@@ -83,9 +84,12 @@ export const useTodoStore = create<TodoState>()(
             deleteTodo: (id) => {
                 const todo = get().todos.find(t => t.id === id);
                 if (!todo) return;
+                // 获取toastStore仓库的操作
+                const {addToast} = useToastStore.getState();
 
                 // 1️⃣ 本地删除
                 set({ todos: get().todos.filter(t => t.id !== id) });
+                addToast('删除成功', 'success')
 
                 // 2️⃣ 同步到服务器
                 apiDelete(id)
