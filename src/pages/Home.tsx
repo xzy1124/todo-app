@@ -6,7 +6,6 @@ import { useToastStore } from '../store/toastStore';
 import Toast from '../common/toast/Toast';
 import { useNetworkStatus } from '../hooks/useNetworkStatus';
 import { X } from 'lucide-react';
-import TodoStats from './TodoStatus';
 import { useEffect, useState } from 'react';
 
 const Home: React.FC = () => {
@@ -47,7 +46,8 @@ const Home: React.FC = () => {
     // 筛选 + 搜索 + 排序
     const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
     const normalizedSearch = debounceSearch.trim().toLowerCase();
-    const filteredTodos = todos
+    const safeTodos = Array.isArray(todos) ? todos : [];
+    const filteredTodos = safeTodos
         .filter(todo => {
             if (filter === 'active') return !todo.completed;
             if (filter === 'completed') return todo.completed;
@@ -85,7 +85,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className='w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8'>
-                <TodoStats />
+             
                 <h1 className='text-3xl font-bold text-center mb-6'>Todo App</h1>
 
                 {/* 输入框 */}

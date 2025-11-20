@@ -37,9 +37,15 @@ export const useTodoStore = create<TodoState>()(
             fetchTodos: async () => {
                 try {
                     const res = await apiGet();
-                    set({ todos: res.data });
+                    // 确保 todos 始终是数组
+                    const todosData = Array.isArray(res.data) ? res.data : [];
+                    set({ todos: todosData });
                 } catch (err) {
                     console.warn('⚠️ 获取服务器 todos 失败，使用本地缓存', err);
+                    // 出错时确保 todos 是数组
+                    if (!Array.isArray(get().todos)) {
+                        set({ todos: [] });
+                    }
                 }
             },
 
