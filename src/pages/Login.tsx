@@ -12,8 +12,8 @@ const Login: React.FC = () => {
         e.preventDefault();
         try {
             const res = await login(username, password);
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('userId', res.data.userId.toString());
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('userId', res.userId);
             navigate('/');
         } catch (error) {
             console.log(error);

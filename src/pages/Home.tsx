@@ -7,6 +7,7 @@ import Toast from '../common/toast/Toast';
 import { useNetworkStatus } from '../hooks/useNetworkStatus';
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import LogoutButton from './Logout';
 
 const Home: React.FC = () => {
     const isOnline = useNetworkStatus();
@@ -87,6 +88,7 @@ const Home: React.FC = () => {
             <div className='w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8'>
              
                 <h1 className='text-3xl font-bold text-center mb-6'>Todo App</h1>
+                <LogoutButton />
 
                 {/* 输入框 */}
                 <TodoInput
