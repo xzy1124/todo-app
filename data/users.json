@@ -8,5 +8,10 @@
     "id": 2,
     "username": "xzy",
     "password": "$2b$10$/T.JvF6WaraMptWadmnN/eWiTKw6bFgb/PPK85FJOKCQ1HGSxAnaS"
+  },
+  {
+    "id": 3,
+    "username": "lulu",
+    "password": "$2b$10$g2Vc2k0eCxFnhWo7iAhR/OuSfg5i0CGWxY54Xyxi0KJ/rfUy2ifWO"
   }
 ]
