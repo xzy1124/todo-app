@@ -94,7 +94,7 @@ export const useTodos = () => {
 
     // 🔹 添加待办
     const handleAdd = (title: string, deadline?: string, group?: string) => {
-        const tempId = Date.now();
+        const tempId = Date.now().toString();
         const newTodo: Todo = { id: tempId, title, completed: false, deadline, group };
 
         updateTodos(prev => [newTodo, ...prev]);
@@ -111,7 +111,7 @@ export const useTodos = () => {
     };
 
     // 🔹 切换完成状态
-    const handleToggle = (id: number) => {
+    const handleToggle = (id: string) => {
         updateTodos(prev =>
             prev.map(todo =>
                 todo.id === id ? { ...todo, completed: !todo.completed } : todo
@@ -131,7 +131,7 @@ export const useTodos = () => {
     };
 
     // 🔹 删除待办
-    const handleDelete = (id: number) => {
+    const handleDelete = (id: string) => {
         const current = todos.find(t => t.id === id);
         if (!current) return;
 

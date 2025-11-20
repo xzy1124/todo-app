@@ -9,10 +9,10 @@ export const addTodo = (title: string, deadline?: string, group?: string) =>
     axiosInstance.post<Todo>(API_URL, 
         { title, completed: false, deadline, group })
 //修改，要根据id修改,修改之后的数据还是个待办事项的对象
-export const updateTodo = (id: number, data: Partial<Todo>) => 
+export const updateTodo = (id: string, data: Partial<Todo>) => 
     axiosInstance.patch<Todo>(`${API_URL}/${id}`, data)
 // 删除，也是一样的根据id，但是应该不需要返回新对象了
-export const deleteTodo = (id: number) => 
+export const deleteTodo = (id: string) => 
     axiosInstance.delete(`${API_URL}/${id}`)
 // 这里的API-URL也用模板字符串是因为统一规范
 // axios.patch(url, body) 这种写法是 axios 规范，不是语法规定。

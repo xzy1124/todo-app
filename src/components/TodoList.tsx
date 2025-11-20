@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from 'motion/react';
 // 这是待办事项列表的实现，一是能展示多个待办，而是能根据状态过滤展示
 export interface TodoListProps {
     todos: Todo[]; //需要一个待办数组，让子组件知道要显示哪些待办
-    onToggle: (id: number) => void; //切换事件，获取id作为参数，返回一个空函数
-    onDelete: (id: number) => void; //删除事件，获取id作为参数，返回一个空函数
+    onToggle: (id: string) => void; //切换事件，获取id作为参数，返回一个空函数
+    onDelete: (id: string) => void; //删除事件，获取id作为参数，返回一个空函数
     searchTerm?: string; //搜索关键词
 }
 const TodoList: React.FC<TodoListProps> = ({todos, onToggle, onDelete, searchTerm}) => {

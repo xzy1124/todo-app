@@ -7,8 +7,8 @@ import type { Todo } from '../types/todo';
  */
 export interface TodoItemProps {
     todo: Todo; //需要一条待办对象，让子组件知道要显示哪一条待办
-    onToggle: (id: number) => void; //切换事件，获取id作为参数，返回一个空函数
-    onDelete: (id: number) => void; //删除事件，获取id作为参数，返回一个空函数
+    onToggle: (id: string) => void; //切换事件，获取id作为参数，返回一个空函数
+    onDelete: (id: string) => void; //删除事件，获取id作为参数，返回一个空函数
     //只传id,是用户点击之后我们传给父组件，父组件再用useState更新状态，调API
     // 子组件永远不修改全局数据，而是告诉父组件怎么改
         // 添加高亮逻辑，这是作用在item身上的，所以它应当有这个属性

@@ -16,8 +16,8 @@ interface TodoState {
 
     // ---- Actions ----
     addTodo: (title: string, deadline?: string, group?: string) => void;
-    toggleTodo: (id: number) => void;
-    deleteTodo: (id: number) => void;
+    toggleTodo: (id: string) => void;
+    deleteTodo: (id: string) => void;
     completeAll: () => void;
     deleteAll: () => void;
 
@@ -50,7 +50,7 @@ export const useTodoStore = create<TodoState>()(
             },
 
             addTodo: (title, deadline, group) => {
-                const tempId = Date.now();
+                const tempId = Date.now().toString();
                 const newTodo: Todo = { id: tempId, title, completed: false, deadline, group };
 
                 // 1️⃣ 更新本地状态

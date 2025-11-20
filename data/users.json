@@ -18,5 +18,15 @@
     "id": 4,
     "username": "回炉重造",
     "password": "$2b$10$raMYE4lMLNnRrsvFq8Q5/usq..5YHZVjTyPPUdfB13k1jFsXmfR.m"
+  },
+  {
+    "id": 5,
+    "username": "去掉string",
+    "password": "$2b$10$rqKvL6SJIMvnd4dZQcWePuuXCPM.Tr2JGVC6siVvhVcl8N.a1pcsG"
+  },
+  {
+    "id": 6,
+    "username": "id",
+    "password": "$2b$10$KOTu8/oDvyA4OLT6qbV7p.2jbrLKKi8j8JJc.eu9cO/MbQm7Jqyr6"
   }
 ]
