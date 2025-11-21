@@ -1,12 +1,16 @@
 // src/api/authApi.ts
 import { supabase } from "../utils/supabaseClient";
+import { generateJWT } from "../utils/jwt";
+import type { AuthJWTPayload } from "../utils/jwt";
 
-interface LoginResponse {
+export interface LoginResponse {
     token: string;
     userId: string;
 }
 
-// 注册
+/**
+ * 注册：插入 username + password 到 Supabase users 表
+ */
 export const register = async (username: string, password: string) => {
     const { data, error } = await supabase
         .from("users")
@@ -15,31 +19,40 @@ export const register = async (username: string, password: string) => {
         .single();
 
     if (error) throw error;
-
-    return data; // 你原本 register 不需要 token，继续保持这样
+    return data;
 };
 
-// 登录（返回 token + userId）
-export const login = async (username: string, password: string): Promise<LoginResponse> => {
-    // 查用户
+/**
+ * 登录：校验密码并生成 JWT
+ */
+export const login = async (
+    username: string,
+    password: string
+): Promise<LoginResponse> => {
+    // 查询用户
     const { data, error } = await supabase
         .from("users")
         .select("*")
         .eq("username", username)
         .single();
 
-    if (error || !data) throw new Error("用户不存在");
+    if (error || !data) {
+        throw new Error("用户不存在");
+    }
 
-    // 校验密码（明文版）
+    // 校验密码（明文）
     if (data.password !== password) {
         throw new Error("密码错误");
     }
 
-    // **生成假 token（模仿后端）**
-    // 真实项目你可以用 JWT，但现在前端就能生成
-    const token = btoa(`${data.id}:${Date.now()}`);
+    // ✨ 用真实 JWT 生成 Token
+    const payload: AuthJWTPayload = {
+        userId: data.id,
+        username: data.username,
+    };
 
-    // 返回你原本需要的格式
+    const token = await generateJWT(payload);
+
     return {
         token,
         userId: data.id,
