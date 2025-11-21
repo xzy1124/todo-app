@@ -1,73 +1,157 @@
-# React + TypeScript + Vite
+# 🚀 **Todo App —— 基于 React + Zustand + Supabase + Express 的个人待办系统**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个从 0 到 1 独立设计与开发的全栈 Todo 应用。
+项目包含前端组件化开发、全局状态管理、自定义 Hook、JWT 登录系统、以及 Supabase 云数据库的整合。
+适合作为全栈能力展示项目，也能扩展成完整的通用 CRUD 系统。
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🧩 **技术栈（Tech Stack）**
 
-## React Compiler
+### **Frontend**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* React 19
+* Zustand（全局状态管理）
+* TailwindCSS
+* Vite
+* Lucide-react（图标）
+* Framer Motion（动画）
+* Custom Hook（useNetworkStatus）
 
-## Expanding the ESLint configuration
+### **Backend**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* Node.js + Express
+* JSON 文件模拟数据库（初版）
+* JWT 用户认证
+* Bcrypt 密码加密
+* Supabase Database（Todo 增删改查）
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### **Deployment**
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* Vercel（前端）
+* Supabase Cloud
+* 本地 Node（开发环境）
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 📦 **功能列表（Features）**
+
+### ✔ 用户系统（Express）
+
+* 用户注册（username + password）
+* 用户登录
+* JWT 认证
+* LocalStorage 保存 token
+
+### ✔ Todo 管理（Supabase）
+
+* 添加 Todo
+* 删除 Todo
+* 修改 Todo
+* 完成状态切换
+* 批量全部完成
+* 根据状态筛选：All / Active / Completed
+
+### ✔ 离线增强（Offline Support）
+
+* 自动检测在线 / 离线
+* 离线时 Todo 操作加入 offlineQueue
+* 网络恢复后自动同步任务
+
+### ✔ UI/UX
+
+* 全局 Toast 系统
+* 动画过渡（Framer Motion）
+* 自适应布局
+
+---
+
+## 🔧 **业务逻辑（从 0 到 1 演进）**
+
+### **阶段 1：初版后端（Express + JSON 文件）**
+
+* 用户注册、登录、JWT、加密逻辑全部自建
+* todos 读写 JSON 文件
+* 后来遇到并发写入导致数据丢失问题
+
+### **阶段 2：升级到 Supabase（Todos 数据层）**
+
+* 把 todos 的 CRUD 迁移到 Supabase
+* Express 只保留用户系统
+* Todo 表新增 `user_id` 外键（从 JWT 中获取）
+* 使用 Supabase SDK 完成数据操作
+
+### **阶段 3：前端优化**
+
+* 引入 Zustand 管理 todos & toast
+* 构建 offlineQueue
+* 添加 useNetworkStatus
+* 做了乐观更新（先更新 UI，再更新后端）
+
+---
+
+
+## ▶️ **本地运行（Local Development）**
+
+### 1. 启动后端
+
+```bash
+node server.cjs
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. 启动前端
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
+
+前端默认运行在：
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🚀 **部署（Deployment）**
+
+### 1. Vercel 部署前端
+
+* 连接 GitHub 仓库
+* 配置环境变量
+* 自动构建
+
+### 2. Supabase 托管数据库
+
+* 创建 todos 表
+* 配置 RLS
+* 复制 URL/KEY 到 `.env`
+
+---
+
+## 📝 **数据库结构（Supabase）**
+
+**todos 表：**
+
+| 字段名        | 类型        | 说明       |
+| ---------- | --------- | -------- |
+| id         | text      | 主键（前端生成） |
+| title      | text      | Todo 内容  |
+| completed  | bool      | 完成状态     |
+| deadline   | timestamptz  | 截止时间  |
+| priority   | text      |  优先级      |
+| user_id    | text      | 所属用户     |
+| created_at | timestamp | 自动创建     |
+
+---
+
+
+## ❤️ 作者
+
+项目由 **Yanbao（言宝）** 设计与开发。
+如有建议或想继续优化欢迎提出 issue。
+
+---
+
+
